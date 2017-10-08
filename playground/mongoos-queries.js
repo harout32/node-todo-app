@@ -4,9 +4,9 @@
 
  const {ObjectID} = require('mongodb');
 
- var id           = "69da1c3983751c6726a5ea6211";
+ var id           = "69da1c3983751c6726a5ea62";
  
-// if(ObjectID.isValid(id)){
+if(ObjectID.isValid(id)){
 
     Todo.find({_id:id})
     .then((todos)=>{
@@ -36,6 +36,6 @@
     })
     .catch((e)=>{console.log('not saved',e);
     });
-// }else{
-//     console.log('id is invalid');
-// }
+}else{
+    console.log('id is invalid');
+}
