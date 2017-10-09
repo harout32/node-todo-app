@@ -7,7 +7,11 @@ var {mongoose} = require('./db/mongoose');
 var {Todo}     = require('./models/todo');
 var {User}     = require('./models/user');
 
-var app = express();
+
+var app    = express();
+
+const port = process.env.Port || 3000;
+
 app.use(bodyParser.json());
 
 app.post('/todos',(req,res)=>{
@@ -31,9 +35,11 @@ app.get('/todos',(req, res)=>{
 
 app.get('/todos/:id',(req, res)=>{
     var id = req.params.id;
+
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
+    
     Todo.findById(id).then((todo)=>{
         if(!todo){
             return res.status(404).send();
@@ -43,11 +49,24 @@ app.get('/todos/:id',(req, res)=>{
     }).catch((e)=>{
         res.status(400).send();
     });
-})
+});
 
+app.delete('/todos/:id',(req,res)=>{
+    var id = req.params.id;
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    Todo.findByIdAndRemove(id)
+    .then((todo)=>{
+        if(!todo){
+            return res.status(404).send();
+        }
+        res.status(200).send(todo)})
+    .catch((err)=>{
+            res.status(400).send();
+        });
+});
 
-
-
-app.listen(3000, ()=>{
-    console.log('started listening on 3000');
-})
+app.listen(port, ()=>{
+    console.log(`started at port ${port}`);
+});
