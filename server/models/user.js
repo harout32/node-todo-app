@@ -46,7 +46,6 @@ UserSchema.methods.generateAuthToken = function(){
     let access = 'auth';
     let  token = jwt.sign({_id:this._id.toHexString(), access},secret).toString();
     this.tokens.push({access,token});
-    console.log(token);
     return this.save().then(()=>{
         return token
     });
@@ -66,14 +65,29 @@ UserSchema.statics.findByToken = function(token){
     })
 };
 
+UserSchema.statics.findByCredentials = function(email, password){
+    return this.findOne({email}).then((user)=>{
+        if(!user){
+            return Promise.reject();
+        }
+        return new Promise((resolve, reject)=>{
+            bcrypt.compare(password, user.password, (err, result)=>{
+                if(result){
+                    resolve(user);
+                }else{
+                    reject();
+                }
+            });
+        });
+
+    });
+}
+
 UserSchema.pre('save', function(next){
     //check if on save the password is changed;
     if(this.isModified('password')){
-        console.log(this.isModified('password'));
         bcrypt.genSalt(10,(err,salt)=>{
-            console.log(salt);
         bcrypt.hash(this.password,salt,(err,hash)=>{
-            console.log(hash);
             this.password = hash;
             next();
         });

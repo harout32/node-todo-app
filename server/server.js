@@ -1,6 +1,7 @@
 const _          = require('lodash');
 const express    = require('express');
 const bodyParser = require('body-parser');
+const bcrypt     = require('bcryptjs');
 const {ObjectID} = require('mongodb');
 
 
@@ -100,15 +101,25 @@ app.post('/users',(req,res)=>{
     let user = new User(body);
     user.save()
     .then(()=>{
-        // res.status(200).send(user);
-        // console.log(user);
-       
         user.generateAuthToken().then((token)=>{
         res.header('x-auth',token).send({user,token});
         });
     }).catch((err)=>{
         res.status(400).send(err);
-    })
+    });
+});
+//useres LOGIN
+
+app.post('/users/login',(req,res)=>{
+    let body = _.pick(req.body,['email','password']);
+    User.findByCredentials(body.email, body.password).then((user)=>{
+        return user.generateAuthToken().then((token)=>{
+            res.header('x-auth',token).send({user,token});
+        });
+        
+    }).catch((err)=>{
+        res.status(401).send({message:'email or password was wrong'});
+    });
 });
 //geting user info by token
 app.get('/users/me',authentication,(req,res)=>{
