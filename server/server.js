@@ -1,17 +1,17 @@
 const _          = require('lodash');
-const express      = require('express');
-const bodyParser   = require('body-parser');
+const express    = require('express');
+const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
 
-var {mongoose}   = require('./db/mongoose');
-var {Todo}       = require('./models/todo');
-var {User}       = require('./models/user');
+let {mongoose}   = require('./db/mongoose');
+let {Todo}       = require('./models/todo');
+let {User}       = require('./models/user');
+let {authentication} = require('./middleware/authentication');
 
+let app    = express();
 
-var app    = express();
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000 ;
 
 app.use(bodyParser.json());
 
@@ -35,7 +35,7 @@ app.get('/todos',(req, res)=>{
 })
 
 app.get('/todos/:id',(req, res)=>{
-    var id = req.params.id;
+    let id = req.params.id;
 
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
@@ -53,7 +53,7 @@ app.get('/todos/:id',(req, res)=>{
 });
 
 app.delete('/todos/:id',(req,res)=>{
-    var id = req.params.id;
+    let id = req.params.id;
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
@@ -69,8 +69,8 @@ app.delete('/todos/:id',(req,res)=>{
 });
 
 app.patch('/todos/:id',(req,res)=>{
-    var id   = req.params.id;
-    var body = _.pick(req.body,['text','completed']);
+    let id   = req.params.id;
+    let body = _.pick(req.body,['text','completed']);
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
@@ -78,7 +78,7 @@ app.patch('/todos/:id',(req,res)=>{
         body.completedAt = new Date().getTime();
     }else{
         body.completed   = false;
-        body.completedAt = null
+        body.completedAt = null;
     }
 
     Todo.findByIdAndUpdate(id,{$set:body},{new:true})
@@ -90,8 +90,32 @@ app.patch('/todos/:id',(req,res)=>{
     .catch((e)=>{
         res.status(400).send();
     })
-    
 });
+
+
+app.post('/users',(req,res)=>{
+    let body = _.pick(req.body,['email','password'])
+    let user = new User(body);
+    user.save()
+    .then(()=>{
+        // res.status(200).send(user);
+        // console.log(user);
+       
+        user.generateAuthToken().then((token)=>{
+        res.header('x-auth',token).send({user,token});
+        });
+    }).catch((err)=>{
+        res.status(400).send(err);
+    })
+});
+
+
+
+
+app.get('/users/me',authentication,(req,res)=>{
+    res.send(req.user);
+});
+
 
 
 
