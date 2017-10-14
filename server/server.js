@@ -15,6 +15,8 @@ const port = process.env.PORT || 3000 ;
 
 app.use(bodyParser.json());
 
+
+//adding new todo
 app.post('/todos',(req,res)=>{
     let todo = new Todo({
         text:req.body.text
@@ -25,7 +27,7 @@ app.post('/todos',(req,res)=>{
         res.status(400).send(e);
     })
 });
-
+//getting all todos
 app.get('/todos',(req, res)=>{
      Todo.find().then((todos)=>{
          res.send({todos});
@@ -33,7 +35,7 @@ app.get('/todos',(req, res)=>{
          res.status(400).send(err);
      });
 })
-
+//get specific todo by id
 app.get('/todos/:id',(req, res)=>{
     let id = req.params.id;
 
@@ -51,7 +53,7 @@ app.get('/todos/:id',(req, res)=>{
         res.status(400).send();
     });
 });
-
+//delete todo by id
 app.delete('/todos/:id',(req,res)=>{
     let id = req.params.id;
     if(!ObjectID.isValid(id)){
@@ -67,7 +69,7 @@ app.delete('/todos/:id',(req,res)=>{
             res.status(400).send();
         });
 });
-
+//updating todo by id
 app.patch('/todos/:id',(req,res)=>{
     let id   = req.params.id;
     let body = _.pick(req.body,['text','completed']);
@@ -92,7 +94,7 @@ app.patch('/todos/:id',(req,res)=>{
     })
 });
 
-
+// sign up new user
 app.post('/users',(req,res)=>{
     let body = _.pick(req.body,['email','password'])
     let user = new User(body);
@@ -108,17 +110,12 @@ app.post('/users',(req,res)=>{
         res.status(400).send(err);
     })
 });
-
-
-
-
+//geting user info by token
 app.get('/users/me',authentication,(req,res)=>{
     res.send(req.user);
 });
 
-
-
-
+//listening to the port 
 app.listen(port, ()=>{
     console.log(`started at port ${port}`);
 });
