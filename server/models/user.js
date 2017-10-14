@@ -81,6 +81,16 @@ UserSchema.statics.findByCredentials = function(email, password){
         });
 
     });
+};
+
+UserSchema.methods.removeToken = function(token){
+    //find any token inside tokens array that is same as our token and update it
+    // useing $pull operator wich deletes it
+   return this.update({
+        $pull:{
+            tokens:{token}
+        }
+    });
 }
 
 UserSchema.pre('save', function(next){

@@ -121,6 +121,17 @@ app.post('/users/login',(req,res)=>{
         res.status(401).send({message:'email or password was wrong'});
     });
 });
+
+//user logout
+app.delete('/users/me/token',authentication,(req, res)=>{
+     req.user.removeToken(req.token)
+     .then(()=>{
+         res.status(200).send();
+     })
+     .catch((err)=>{
+         res.status(400).send();
+     });
+})
 //geting user info by token
 app.get('/users/me',authentication,(req,res)=>{
     res.send(req.user);
