@@ -92,7 +92,7 @@ app.patch('/todos/:id',authentication, (req,res)=>{
         body.completedAt = null;
     }
     Todo.find
-    Todo.findByIdAndUpdate({
+    Todo.findOneAndUpdate({
         _id:id,
         _creator: req.user._id
     },{$set:body},{new:true})
