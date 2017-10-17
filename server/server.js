@@ -1,7 +1,7 @@
 require('./config/config');
 
-const _          = require('lodash');
-const express    = require('express');
+const _       = require('lodash');
+const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt     = require('bcryptjs');
 const {ObjectID} = require('mongodb');
@@ -16,8 +16,14 @@ let app    = express();
 
 const port = process.env.PORT;
 
-app.use(bodyParser.json());
 
+app.use(bodyParser.json());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    next();
+});
 
 //adding new todo
 app.post('/todos',authentication, (req,res)=>{
@@ -110,7 +116,7 @@ app.patch('/todos/:id',authentication, (req,res)=>{
 
 // sign up new user
 app.post('/users',(req,res)=>{
-    let body = _.pick(req.body,['email','password'])
+    let body = _.pick(req.body,['email','password','name'])
     let user = new User(body);
     user.save()
     .then(()=>{

@@ -6,31 +6,37 @@ const bcrypt     = require('bcryptjs');
 
 
 let UserSchema   = new mongoose.Schema({
-        email:         {
-            required:  true,
-            trim:      true,
-            type:      String,
-            minlength: 1,
-            unique: true,
-            validate: {
-                isAsync: true,
+        name:              {
+            required:      true,
+            trim:          true,
+            type:          String,
+            minlength:     1,
+        },
+        email:             {
+            required:      true,
+            trim:          true,
+            type:          String,
+            minlength:     1,
+            unique:        true,
+            validate:      {
+                isAsync:   true,
                 validator: validator.isEmail,
-                message:'{VALUE} is not a valid email'
+                message:   '{VALUE} is not a valid email'
             }
         },
-        password: {
-            type:String,
-            required:true,
-            minLength:6
+        password:          {
+            type:          String,
+            required:      true,
+            minLength:     6
         },
-        tokens:[{
-            access:{
-                type:String,
-                required:true
+        tokens:            [{
+            access:        {
+                type:      String,
+                required:  true
             },
-            token:{
-                type:String,
-                required:true
+            token:         {
+                type:      String,
+                required:  true
             }
         }]   
     })
@@ -38,7 +44,7 @@ let UserSchema   = new mongoose.Schema({
 
 UserSchema.methods.toJSON = function(){
     let userObject = this.toObject();
-    return _.pick(userObject,['_id','email']);
+    return _.pick(userObject,['_id','email','name']);
 };
 
 UserSchema.methods.generateAuthToken = function(){
