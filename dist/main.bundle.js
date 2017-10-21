@@ -708,7 +708,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var PORT = 'https://todoharout.herokuapp.com';
+var PORT = 'https://tasks-harout.herokuapp.com';
 // const PORT = 'http://localhost:3000';
 var AuthService = (function () {
     function AuthService(http, router) {
@@ -783,7 +783,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var PORT = 'https://todoharout.herokuapp.com';
+var PORT = 'https://tasks-harout.herokuapp.com';
 // const PORT = 'http://localhost:3000';
 var TasksService = (function () {
     function TasksService(http) {
