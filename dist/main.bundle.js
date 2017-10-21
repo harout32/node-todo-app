@@ -205,7 +205,7 @@ AppModule = __decorate([
 /***/ "../../../../../src/app/components/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"nav justify-content-end\">\n    <li class=\"nav-item\">\n      <a class=\"nav-link active\" href=\"#\">Active</a>\n    </li>\n    <li class=\"nav-item\">\n      <a class=\"nav-link\" href=\"#\">Link</a>\n    </li>\n    <li class=\"nav-item\">\n      <a class=\"nav-link\" href=\"#\">Link</a>\n    </li>\n    <li class=\"nav-item\">\n      <a class=\"nav-link \" (click)=\"logout()\"  style=\"cursor:pointer\"> LogOut</a>\n    </li>\n  </ul>\n\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12 col-md-2\">\n        <div class=\"nav flex-column nav-pills\">\n          <a class=\"nav-link\" routerLinkActive=\"active\" [routerLink]=\"['your-tasks']\" >Your Tasks</a>\n          <a class=\"nav-link\" href=\"#\">Team Tasks</a>\n          <a class=\"nav-link\" href=\"#\">Messages</a>\n        </div>\n    </div>\n      <div class=\"col-12 col-md-10\">\n        <router-outlet></router-outlet>\n      </div>\n\n\n      \n    \n  </div>\n</div>\n"
+module.exports = "<ul class=\"nav justify-content-end\">\n    <li class=\"nav-item\">\n      <a class=\"nav-link \" (click)=\"logout()\"  style=\"cursor:pointer\"> LogOut</a>\n    </li>\n  </ul>\n\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12 col-md-2\">\n        <div class=\"nav flex-column nav-pills\">\n          <a class=\"nav-link\" routerLinkActive=\"active\" [routerLink]=\"['your-tasks']\" >Your Tasks</a>\n          <a class=\"nav-link\" href=\"#\">Team Tasks</a>\n          <a class=\"nav-link\" href=\"#\">Messages</a>\n        </div>\n    </div>\n      <div class=\"col-12 col-md-10\">\n        <router-outlet></router-outlet>\n      </div>\n\n\n      \n    \n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -263,7 +263,6 @@ var DashboardComponent = (function () {
             localStorage.clear();
             _this.router.navigate(['/reg']);
         }, function (err) {
-            console.log(err);
         });
     };
     return DashboardComponent;
@@ -337,10 +336,8 @@ var AddTasksModalComponent = (function () {
     AddTasksModalComponent.prototype.addTask = function (f) {
         var _this = this;
         this.tasksService.addTask(f.value.title, f.value.description).subscribe(function (success) {
-            console.log(success);
             _this.activeModal.close();
         }, function (error) {
-            console.log(error);
         });
     };
     return AddTasksModalComponent;
@@ -460,9 +457,7 @@ var IndividualTasksComponent = (function () {
     IndividualTasksComponent.prototype.onDrop = function (args) {
         var e = args[0], el = args[1];
         // do something
-        console.log(e.id);
-        console.log(el.id);
-        this.tasksService.updatTaskById(e.id, el.id).subscribe(function (res) { return console.log(res); }, function (err) { return console.log(err); });
+        this.tasksService.updatTaskById(e.id, el.id).subscribe();
     };
     IndividualTasksComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -486,7 +481,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/components/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n <div class=\"row\">\n         <div class=\"col-sm-6\">\n             <h1>LogIn</h1>\n </div>\n </div>\n<div class=\"row\">\n    <div class=\"col-sm-12 col-md-push-4 col-md-4\">\n<form (ngSubmit)=\"onLogin()\" #f=\"ngForm\">\n<div class=\"form-group\">\n    <label for=\"email\">Email address:</label>\n    <input type=\"email\" class=\"form-control\" id=\"email\"  name=\"email\" required email [(ngModel)]=\"email\">\n  </div>\n\n  <div class=\"form-group\">\n    <label for=\"pwd\">Password:</label>\n    <input type=\"password\" class=\"form-control\" id=\"pwd\" name=\"password\" required password [(ngModel)]=\"password\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary center-margin\" [disabled]=\"!f.valid\" >Login</button>\n</form>\n    </div>\n</div>\n</div>"
+module.exports = "<div class=\"container\">\n <div class=\"row\">\n         <div class=\"col-sm-6\">\n             <h1>LogIn</h1>\n </div>\n </div>\n<div class=\"row\">\n        <div class=\"col-4\"></div>\n    <div class=\"col-4\">\n<form (ngSubmit)=\"onLogin()\" #f=\"ngForm\">\n<div class=\"form-group\">\n    <label for=\"email\">Email</label>\n    <input type=\"email\" class=\"form-control\" id=\"email\"  name=\"email\" required email [(ngModel)]=\"email\">\n  </div>\n\n  <div class=\"form-group\">\n    <label for=\"pwd\">Password</label>\n    <input type=\"password\" class=\"form-control\" id=\"pwd\" name=\"password\" required password [(ngModel)]=\"password\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary center-margin\" [disabled]=\"!f.valid\" >Login</button>\n</form>\n    </div>\n</div>\n</div>"
 
 /***/ }),
 
@@ -561,7 +556,7 @@ var _a, _b;
 /***/ "../../../../../src/app/components/reg/reg.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n<div class=\"col-sm-6\">\n    <h1>Register</h1>\n</div>\n    <div class=\"col-sm-6\">\n        <a [routerLink]=\"['/login']\" class=\"text-right\" style=\"cursor:pointer\"> <h5>Log in</h5></a>\n    </div>\n  </div>\n\n\n\n<div class=\"row\">\n<div class=\"col-sm-12 col-md-push-4 col-md-4\">\n    <form (ngSubmit)=\"onRegister()\" #f=\"ngForm\">\n        <div class=\"form-group\">\n            <label for=\"User\">User name:</label>\n            <input type=\"text\" class=\"form-control\" id=\"User\"  name=\"userName\" required [(ngModel)]=\"user\">\n          </div>\n        <div class=\"form-group\">\n          <label for=\"email\">Email address:</label>\n          <input type=\"email\" class=\"form-control\" id=\"email\"  name=\"email\" required email [(ngModel)]=\"email\">\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"pwd\">Password:</label>\n          <input type=\"password\" class=\"form-control\" id=\"pwd\" name=\"password\" required password [(ngModel)]=\"password\">\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary center-margin\" [disabled]=\"!f.valid\" >Register</button>\n    </form>\n  </div>\n</div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n<div class=\"col-sm-6\">\n    <h1>Register</h1>\n</div>\n    <div class=\"col-sm-6\">\n        <a [routerLink]=\"['/login']\" class=\"text-right\" style=\"cursor:pointer\"> <h5>Log in</h5></a>\n    </div>\n  </div>\n\n\n\n<div class=\"row\">\n  <div class=\"col-4\"></div>\n<div class=\"col-4\">\n    <form (ngSubmit)=\"onRegister()\" #f=\"ngForm\">\n        <div class=\"form-group\">\n            <label for=\"User\">User name</label>\n            <input type=\"text\" class=\"form-control\" id=\"User\"  name=\"userName\" required [(ngModel)]=\"user\">\n          </div>\n        <div class=\"form-group\">\n          <label for=\"email\">Email </label>\n          <input type=\"email\" class=\"form-control\" id=\"email\"  name=\"email\" required email [(ngModel)]=\"email\">\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"pwd\">Password</label>\n          <input type=\"password\" class=\"form-control\" id=\"pwd\" name=\"password\" required password [(ngModel)]=\"password\">\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary center-margin\" [disabled]=\"!f.valid\" >Register</button>\n    </form>\n  </div>\n</div>\n</div>\n"
 
 /***/ }),
 
@@ -733,7 +728,6 @@ var AuthService = (function () {
     };
     AuthService.prototype.onRegister = function (name, email, password) {
         var body = { name: name, email: email, password: password };
-        console.log(body);
         return this.http.post(PORT + '/users', body).map(function (response) {
             return response.json();
         }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].throw(err); });
@@ -812,7 +806,6 @@ var TasksService = (function () {
             _this.tasks = res.todos;
             _this.updatedTasksSubject.next(_this.tasks);
         }, function (err) {
-            console.log(err);
         });
     };
     //update a task
