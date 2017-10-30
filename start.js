@@ -9,14 +9,14 @@ const todos = require('./server/routes/todos')
 const port = process.env.PORT;
 
 let app    = express();
-//just for dev
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin,x-auth,  X-Requested-With, Content-Type, Accept");
-//     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS, PATCH');
-//     next();
-// });
-//
+// just for dev
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin,x-auth,  X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS, PATCH');
+    next();
+});
+
 app.use(express.static(path.join(__dirname,'dist')));
 
 app.use(bodyParser.urlencoded({extended:true}));
